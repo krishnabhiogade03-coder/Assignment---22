@@ -1,110 +1,132 @@
-import pandas as pd
+import sklearn
+print(sklearn.__version__)
+
 import streamlit as st
+import pandas as pd
 import joblib
 
-model = joblib.load("heart_model.pkl")
-scaler = joblib.load("scaler.pkl")
-columns = joblib.load("columns.pkl")
+st.write("1. Starting app")
 
-st.set_page_config(
-    page_title="Heart Disease Prediction",
-    layout="centered"
-    )
+try:
+    model = joblib.load("heart_model.pkl")
+    st.write("2. Model loaded")
 
-st.title("🫀Heart Disease Prediction")
-st.write("Enter the patient's details below and click Predict.")
+    scaler = joblib.load("scaler.pkl")
+    st.write("3. Scaler loaded")
 
-age = st.number_input(
-    "Age",
-    min_value=1,
-    max_value=120,
-    value=45
-    )
+    columns = joblib.load("columns.pkl")
+    st.write("4. Columns loaded")
 
-restingbp = st.number_input(
-    "Resting Blood Pressure",
-    min_value=50,
-    max_value=250,
-    value=120
-    )
+except Exception as e:
+    st.error(e)
+    st.stop()
+# import pandas as pd
+# import streamlit as st
+# import joblib
 
-cholesterol = st.number_input(
-    "Cholesterol",
-    min_value=0,
-    max_value=700,
-    value=200
-    )
+# model = joblib.load("heart_model.pkl")
+# scaler = joblib.load("scaler.pkl")
+# columns = joblib.load("columns.pkl")
 
-fastingbs = st.selectbox(
-    "Fasting Blood Sugar",
-    [0,1]
-    )
+# st.set_page_config(
+#     page_title="Heart Disease Prediction",
+#     layout="centered"
+#     )
 
-maxhr = st.number_input(
-    "Maximum Heart Rate",
-    min_value=50,
-    max_value=250,
-    value=150
-    )
+# st.title("🫀Heart Disease Prediction")
+# st.write("Enter the patient's details below and click Predict.")
 
-oldpeak = st.number_input(
-    "Oldpeak",
-    min_value=0.0,
-    max_value=10.0,
-    value=1.0,
-    step=0.1
-    )
+# age = st.number_input(
+#     "Age",
+#     min_value=1,
+#     max_value=120,
+#     value=45
+#     )
 
-sex = st.selectbox(
-    "Sex",
-    ["M", "F"]
-    )
+# restingbp = st.number_input(
+#     "Resting Blood Pressure",
+#     min_value=50,
+#     max_value=250,
+#     value=120
+#     )
 
-chestpain = st.selectbox(
-    "Chest Pain Type",
-    ["ATA", "NAP", "ASY", "TA"]
-    )
+# cholesterol = st.number_input(
+#     "Cholesterol",
+#     min_value=0,
+#     max_value=700,
+#     value=200
+#     )
 
-restingecg = st.selectbox(
-    "Resting ECG",
-    ["Normal", "ST", "LVH"]
-    )
+# fastingbs = st.selectbox(
+#     "Fasting Blood Sugar",
+#     [0,1]
+#     )
 
-exerciseangina = st.selectbox(
-    "Exercise Angina",
-    ["N", "Y"]
-    )
+# maxhr = st.number_input(
+#     "Maximum Heart Rate",
+#     min_value=50,
+#     max_value=250,
+#     value=150
+#     )
 
-stslope = st.selectbox(
-    "ST Slope",
-    ["Up", "Flat", "Down"]
-    )
+# oldpeak = st.number_input(
+#     "Oldpeak",
+#     min_value=0.0,
+#     max_value=10.0,
+#     value=1.0,
+#     step=0.1
+#     )
 
-if st.button("Predict"):
+# sex = st.selectbox(
+#     "Sex",
+#     ["M", "F"]
+#     )
 
-    input_data = pd.DataFrame({
-        "Age": [age],
-        "RestingBP": [restingbp],
-        "Cholesterol": [cholesterol],
-        "FastingBS": [fastingbs],
-        "MaxHR": [maxhr],
-        "Oldpeak": [oldpeak],
-        "Sex": [sex],
-        "ChestPainType": [chestpain],
-        "RestingECG": [restingecg],
-        "ExerciseAngina": [exerciseangina],
-        "ST_Slope": [stslope]
-    })
+# chestpain = st.selectbox(
+#     "Chest Pain Type",
+#     ["ATA", "NAP", "ASY", "TA"]
+#     )
 
-    input_data = pd.get_dummies(input_data)
+# restingecg = st.selectbox(
+#     "Resting ECG",
+#     ["Normal", "ST", "LVH"]
+#     )
 
-    input_data = input_data.reindex(columns=columns, fill_value=0)
+# exerciseangina = st.selectbox(
+#     "Exercise Angina",
+#     ["N", "Y"]
+#     )
 
-    input_data = scaler.transform(input_data)
+# stslope = st.selectbox(
+#     "ST Slope",
+#     ["Up", "Flat", "Down"]
+#     )
 
-    prediction = model.predict(input_data)
+# if st.button("Predict"):
 
-    if prediction[0] == 1:
-        st.error("Heart Disease: Yes")
-    else:
-        st.success("Heart Disease: No")
+#     input_data = pd.DataFrame({
+#         "Age": [age],
+#         "RestingBP": [restingbp],
+#         "Cholesterol": [cholesterol],
+#         "FastingBS": [fastingbs],
+#         "MaxHR": [maxhr],
+#         "Oldpeak": [oldpeak],
+#         "Sex": [sex],
+#         "ChestPainType": [chestpain],
+#         "RestingECG": [restingecg],
+#         "ExerciseAngina": [exerciseangina],
+#         "ST_Slope": [stslope]
+#     })
+
+#     input_data = pd.get_dummies(input_data)
+
+#     input_data = input_data.reindex(columns=columns, fill_value=0)
+
+#     input_data = scaler.transform(input_data)
+
+#     prediction = model.predict(input_data)
+
+#     if prediction[0] == 1:
+#         st.error("Heart Disease: Yes")
+#     else:
+#         st.success("Heart Disease: No")
