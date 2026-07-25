@@ -105,9 +105,9 @@ if st.button("Predict"):
     prediction = model.predict(input_data)
 
     if prediction[0] == 1:
-        st.error("❤️ Heart Disease: YES")
+        st.error("Heart Disease: YES")
     else:
-        st.success("🤍 Heart Disease: NO")
+        st.success("Heart Disease: NO")
 
 
 
